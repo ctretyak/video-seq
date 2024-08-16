@@ -3,6 +3,14 @@ import { VideoTree } from './video-tree/tree';
 import { VIDEO_TREE } from './video-tree';
 import { VideoProgressBar } from './video-progress-bar';
 
+let videoTree = VIDEO_TREE;
+
+const searchParams = new URLSearchParams(window.location.search);
+const paramsTree = searchParams.get("tree");
+if(paramsTree){
+  videoTree = JSON.parse(paramsTree) as any;
+}
+
 (async () => {
   // Create a new application
   const app = new Application();
@@ -24,7 +32,7 @@ import { VideoProgressBar } from './video-progress-bar';
 
   app.stage.addChild(progress);
 
-  const tree = VideoTree.fromJSON(VIDEO_TREE);
+  const tree = VideoTree.fromJSON(videoTree);
 
   await tree.loadSprites();
 
