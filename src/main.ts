@@ -20,6 +20,7 @@ if(paramsTree){
 
   // Append the application canvas to the document body
   document.body.appendChild(app.canvas);
+  const playerWrapper = document.getElementById('player-wrapper');
 
   const text = new Text({
     text: 'Loading',
@@ -53,6 +54,13 @@ if(paramsTree){
       currentVideo.resetVideo();
     }
 
+    if(playerWrapper){
+      const video = nextVideo.getVideo();
+      video.style.maxWidth = '100%';
+      video.style.maxHeight = '100%';
+      playerWrapper.innerHTML = '';
+      playerWrapper.appendChild(video)
+    }
     nextVideo.play();
 
     currentVideo = nextVideo;

@@ -5,9 +5,24 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
+    <style>
+      #player-wrapper {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        max-height: 20vh;
+        max-width: 20vw;
+        background-color: #333;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
   </head>
   <body style="margin: 0; overflow: hidden">
     <div id="app"></div>
+    <div id="player-wrapper">miniplayer</div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
