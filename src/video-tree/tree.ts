@@ -38,12 +38,12 @@ export class VideoTree {
   resetVideo() {
     const video = this.getVideo();
     video.pause();
-    video.currentTime = 0;
+    video.currentTime = 0.001;
   }
 
   play() {
     const video = this.getVideo();
-    video.currentTime = 0;
+    video.currentTime = 0.001;
     video.play();
   }
 
