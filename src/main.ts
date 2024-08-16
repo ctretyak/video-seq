@@ -66,6 +66,16 @@ if(paramsTree){
     }
     if (currentVideo) {
       progress.progress = currentVideo.getProgress();
+
+      const video = currentVideo.getVideo();
+      const screenHeight = app.screen.height - progress.height - text.height - 8;
+
+      // resize video to fullscreen
+      if(video.videoWidth && video.videoHeight){
+        const scale = Math.min(app.screen.width / video.videoWidth, screenHeight / video.videoHeight);
+        currentVideo.sprite.width =video.videoWidth * scale;
+        currentVideo.sprite.height =video.videoHeight * scale;
+      }
     }
   });
 })();

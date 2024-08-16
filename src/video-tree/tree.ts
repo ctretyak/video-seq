@@ -32,7 +32,7 @@ export class VideoTree {
   }
 
   getVideo() {
-    return this.sprite.texture.baseTexture.resource as any as HTMLVideoElement;
+    return this.sprite.texture.source.resource as any as HTMLVideoElement;
   }
 
   resetVideo() {
