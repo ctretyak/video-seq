@@ -35,9 +35,9 @@ export class VideoTree {
       this.addEvents();
     }
     const video = this.getVideo();
-    video.controls = true;
     video.pause();
-    video.currentTime = 0;
+    video.controls = true;
+    // video.currentTime = 0;
   }
 
   addEvents() {
