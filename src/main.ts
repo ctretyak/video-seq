@@ -28,12 +28,20 @@ if(paramsTree){
   });
   app.stage.addChild(text);
 
+  const eventsText = new Text({
+    text: '{}',
+    style: { fill: '#fff' },
+  });
+  eventsText.x = 450;
+  eventsText.zIndex = 99;
+  app.stage.addChild(eventsText);
+
   const progress = new VideoProgressBar();
   progress.y = text.height;
 
   app.stage.addChild(progress);
 
-  const tree = VideoTree.fromJSON(videoTree);
+  const tree = VideoTree.fromJSON(videoTree, 0, eventsText);
 
   await tree.loadSprites();
 

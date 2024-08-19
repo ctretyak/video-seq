@@ -1,4 +1,4 @@
-import { Assets, Sprite } from 'pixi.js';
+import { Assets, Sprite, Text } from 'pixi.js';
 import { JSONVideoTree } from './interfaces';
 
 export class VideoTree {
@@ -7,19 +7,22 @@ export class VideoTree {
 
   private src: string;
   private nodes: VideoTree[];
+  private eventsText?: Text;
 
-  static fromJSON(json: JSONVideoTree, id = 0): VideoTree {
+  static fromJSON(json: JSONVideoTree, id = 0, eventsText?: Text): VideoTree {
     return new VideoTree(
       id,
       json.src,
-      json.nodes?.map((node, idx) => VideoTree.fromJSON(node, idx))
+      json.nodes?.map((node, idx) => VideoTree.fromJSON(node, idx, eventsText)),
+      eventsText
     );
   }
 
-  constructor(id: number, src: string, nodes: VideoTree[] = []) {
+  constructor(id: number, src: string, nodes: VideoTree[] = [], eventsText?: Text) {
     this.id = id;
     this.src = src;
     this.nodes = nodes;
+    this.eventsText = eventsText;
   }
 
   async loadSprites() {
@@ -28,7 +31,47 @@ export class VideoTree {
       ...this.nodes.map((node) => node.loadSprites()),
     ]);
     this.sprite = new Sprite(texture);
+    if(this.eventsText){
+      this.addEvents();
+    }
     this.resetVideo();
+  }
+
+  addEvents() {
+    [
+      "audioprocess",
+      "canplay",
+      "canplaythrough",
+      "complete",
+      "durationchange",
+      "emptied",
+      "ended",
+      "error",
+      "loadeddata",
+      "loadedmetadata",
+      "loadstart",
+      "pause",
+      "play",
+      "playing",
+      "progress",
+      "ratechange",
+      "seeked",
+      "seeking",
+      "stalled",
+      "suspend",
+      "timeupdate",
+      "volumechange",
+      "waiting"
+    ].map((event) => {
+        const video = this.getVideo();
+      video.addEventListener(event, () => {
+        if (this.eventsText) {
+          const currentText = JSON.parse(this.eventsText.text); 
+          currentText[video.currentSrc.replace(/(\.mp4)+$/gm, "").slice(-8)] = event;
+          this.eventsText.text = JSON.stringify(currentText, null, 2);
+        }
+      })
+    })
   }
 
   getVideo() {
@@ -38,7 +81,7 @@ export class VideoTree {
   resetVideo() {
     const video = this.getVideo();
     video.pause();
-    video.currentTime = 0.001;
+    video.currentTime = 0;
     video.controls = true;
   }
 
