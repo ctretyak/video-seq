@@ -1,13 +1,12 @@
-import { Application, Text } from 'pixi.js';
-import { VideoTree } from './video-tree/tree';
+import { Application, Graphics } from 'pixi.js';
 import { VIDEO_TREE } from './video-tree';
-import { VideoProgressBar } from './video-progress-bar';
+import { LoopPlayer } from './loop-player';
 
 let videoTree = VIDEO_TREE;
 
 const searchParams = new URLSearchParams(window.location.search);
 const paramsTree = searchParams.get("tree");
-if(paramsTree){
+if (paramsTree) {
   videoTree = JSON.parse(paramsTree) as any;
 }
 
@@ -20,78 +19,34 @@ if(paramsTree){
 
   // Append the application canvas to the document body
   document.body.appendChild(app.canvas);
-  const playerWrapper = document.getElementById('player-wrapper');
 
-  const text = new Text({
-    text: 'Loading',
-    style: { fill: '#fff' },
+  const button = new Graphics()
+    .roundRect(0, 0, 100, 100, 10)
+    .fill(0xffffff, 0.5)
+    .beginPath()
+    .moveTo(36, 30)
+    .lineTo(36, 70)
+    .lineTo(70, 50)
+    .closePath()
+    .fill(0xffffff);
+button.eventMode = 'static';
+    button.cursor = 'pointer';
+  app.stage.addChild(button);
+
+  const loopPlayer = new LoopPlayer(videoTree);
+  button.on('pointertap', () => {
+    button.destroy();
+
+    app.stage.addChild(loopPlayer);
+    loopPlayer.play();
   });
-  app.stage.addChild(text);
-
-  const eventsText = new Text({
-    text: '{}',
-    style: { fill: '#fff' },
-  });
-  eventsText.x = 450;
-  eventsText.zIndex = 99;
-  app.stage.addChild(eventsText);
-
-  const progress = new VideoProgressBar();
-  progress.y = text.height;
-
-  app.stage.addChild(progress);
-
-  const tree = VideoTree.fromJSON(videoTree, 0, eventsText);
-
-  await tree.loadSprites();
-
-  let currentVideo: VideoTree | undefined = undefined;
-  function playNextVideo() {
-    let nextVideo = currentVideo?.getNextVideo();
-    if (!nextVideo) {
-      nextVideo = tree;
-      text.text = `Video #${nextVideo.id}`;
-    } else {
-      text.text += ` - ${nextVideo.id}`;
-    }
-    nextVideo.sprite.y = text.height + progress.height + 8;
-
-    app.stage.addChild(nextVideo.sprite);
-    if (currentVideo) {
-      app.stage.removeChild(currentVideo.sprite);
-      currentVideo.resetVideo();
-    }
-
-    if(playerWrapper){
-      const video = nextVideo.getVideo();
-      video.style.maxWidth = '100%';
-      video.style.maxHeight = '100%';
-      playerWrapper.innerHTML = '';
-      playerWrapper.appendChild(video)
-    }
-    nextVideo.play();
-
-    currentVideo = nextVideo;
-  }
-
-  playNextVideo();
-
   app.ticker.add(() => {
-    if (currentVideo?.isEnded()) {
-      playNextVideo();
+    // Position the button
+    if(!button.destroyed){
+      button.x = (app.screen.width - button.width) / 2;
+      button.y = (app.screen.height - button.height) / 2;
     }
-    if (currentVideo) {
-      progress.progress = currentVideo.getProgress();
 
-      const video = currentVideo.getVideo();
-      const screenHeight = app.screen.height - progress.height - text.height - 8;
-
-      // resize video to fullscreen
-      if(video.videoWidth && video.videoHeight){
-        const scale = Math.min(app.screen.width / video.videoWidth, screenHeight / video.videoHeight);
-        currentVideo.sprite.width =video.videoWidth * scale;
-        currentVideo.sprite.height =video.videoHeight * scale;
-      }
-    }
+    loopPlayer.onTick(app);
   });
 })();
