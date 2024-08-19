@@ -34,7 +34,10 @@ export class VideoTree {
     if(this.eventsText){
       this.addEvents();
     }
-    this.resetVideo();
+    const video = this.getVideo();
+    video.controls = true;
+    video.pause();
+    video.currentTime = 0;
   }
 
   addEvents() {
@@ -81,13 +84,15 @@ export class VideoTree {
   resetVideo() {
     const video = this.getVideo();
     video.pause();
-    video.currentTime = 0;
-    video.controls = true;
+    video.load();
+    video.addEventListener("loadeddata", ()=> {
+      video.pause();
+      video.currentTime = 0;
+    })
   }
 
   play() {
     const video = this.getVideo();
-    video.currentTime = 0.001;
     video.play();
   }
 
