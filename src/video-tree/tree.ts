@@ -31,13 +31,14 @@ export class VideoTree {
       ...this.nodes.map((node) => node.loadSprites()),
     ]);
     this.sprite = new Sprite(texture);
-    if(this.eventsText){
+    if (this.eventsText) {
       this.addEvents();
     }
+
     const video = this.getVideo();
     video.pause();
+    video.currentTime = 0.001;
     video.controls = true;
-    // video.currentTime = 0;
   }
 
   addEvents() {
@@ -66,10 +67,10 @@ export class VideoTree {
       "volumechange",
       "waiting"
     ].map((event) => {
-        const video = this.getVideo();
+      const video = this.getVideo();
       video.addEventListener(event, () => {
         if (this.eventsText) {
-          const currentText = JSON.parse(this.eventsText.text); 
+          const currentText = JSON.parse(this.eventsText.text);
           currentText[video.currentSrc.replace(/(\.mp4)+$/gm, "").slice(-8)] = event;
           this.eventsText.text = JSON.stringify(currentText, null, 2);
         }
@@ -85,7 +86,7 @@ export class VideoTree {
     const video = this.getVideo();
     video.pause();
     video.load();
-    video.addEventListener("loadeddata", ()=> {
+    video.addEventListener("loadeddata", () => {
       video.pause();
       video.currentTime = 0;
     })
