@@ -37,7 +37,7 @@ export class VideoTree {
 
     const video = this.getVideo();
     video.pause();
-    video.currentTime = 0.001;
+    // video.currentTime = 0.001;
     video.controls = true;
   }
 
