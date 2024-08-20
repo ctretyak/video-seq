@@ -29,11 +29,11 @@ if (paramsTree) {
     .lineTo(70, 50)
     .closePath()
     .fill(0xffffff);
-button.eventMode = 'static';
-    button.cursor = 'pointer';
+  button.eventMode = 'static';
+  button.cursor = 'pointer';
   app.stage.addChild(button);
 
-  const loopPlayer = new LoopPlayer(videoTree);
+  const loopPlayer = new LoopPlayer(videoTree, searchParams.has('debug'));
   button.on('pointertap', () => {
     button.destroy();
 
@@ -42,7 +42,7 @@ button.eventMode = 'static';
   });
   app.ticker.add(() => {
     // Position the button
-    if(!button.destroyed){
+    if (!button.destroyed) {
       button.x = (app.screen.width - button.width) / 2;
       button.y = (app.screen.height - button.height) / 2;
     }

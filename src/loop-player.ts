@@ -8,10 +8,10 @@ export class LoopPlayer extends Container {
   private currentVideo: VideoTree | undefined;
   private text: Text;
   private progress: VideoProgressBar;
-  private playerWrapper: HTMLElement | null;
+  private playerWrapper: HTMLElement | null | undefined;
   private playing = false;
 
-  constructor(json: JSONVideoTree) {
+  constructor(json: JSONVideoTree, debug = false) {
     super();
 
     this.text = new Text({
@@ -20,19 +20,22 @@ export class LoopPlayer extends Container {
     });
     this.addChild(this.text);
 
-    const eventsText = new Text({
-      text: '{}',
-      style: { fill: '#fff' },
-    });
-    eventsText.x = 450;
-    eventsText.zIndex = 99;
-    this.addChild(eventsText);
+    let eventsText: Text | undefined; 
+    if(debug){
+       eventsText = new Text({
+        text: '{}',
+        style: { fill: '#fff' },
+      });
+      eventsText.x = 450;
+      eventsText.zIndex = 99;
+      this.addChild(eventsText);
+    }
 
     this.progress = new VideoProgressBar();
     this.progress.y = this.text.height;
     this.addChild(this.progress);
 
-    this.playerWrapper = document.getElementById('player-wrapper');
+    this.playerWrapper = debug ?  document.getElementById('player-wrapper'): undefined;
 
     this.tree = VideoTree.fromJSON(json, 0, eventsText);
   }

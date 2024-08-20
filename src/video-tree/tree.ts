@@ -27,7 +27,7 @@ export class VideoTree {
 
   async loadSprites() {
     const [texture] = await Promise.all([
-      Assets.load(this.src),
+      Assets.load({ src: this.src, data: { autoPlay: false } }),
       ...this.nodes.map((node) => node.loadSprites()),
     ]);
     this.sprite = new Sprite(texture);
@@ -37,7 +37,7 @@ export class VideoTree {
 
     const video = this.getVideo();
     video.controls = true;
-    await this.resetVideo();
+    // await this.resetVideo();
   }
 
   addEvents() {
@@ -84,16 +84,22 @@ export class VideoTree {
   async resetVideo() {
     const video = this.getVideo();
     video.pause();
-    video.load();
-    return new Promise<void>((resolve) =>{
-      const listener = () => {
-        video.pause();
-        video.currentTime = 0;
-        video.removeEventListener("loadeddata", listener);
-        resolve();
-      }
-      video.addEventListener("loadeddata", listener)
-    })
+    video.currentTime = 0;
+    if (this.iOS()) {
+      /* you have to call load for ios devices
+       * https://stackoverflow.com/questions/49792768/js-html5-audio-why-is-canplaythrough-not-fired-on-ios-safari
+       * */
+      video.load();
+      return new Promise<void>((resolve) => {
+        const listener = () => {
+          video.pause();
+          video.currentTime = 0;
+          video.removeEventListener("loadeddata", listener);
+          resolve();
+        }
+        video.addEventListener("loadeddata", listener)
+      })
+    }
   }
 
   play() {
@@ -118,5 +124,18 @@ export class VideoTree {
   getProgress() {
     const video = this.getVideo();
     return (video.currentTime / video.duration) * 100;
+  }
+
+  iOS() {
+    return [
+      'iPad Simulator',
+      'iPhone Simulator',
+      'iPod Simulator',
+      'iPad',
+      'iPhone',
+      'iPod'
+    ].includes(navigator.platform)
+      // iPad on iOS 13 detection
+      || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
   }
 }
