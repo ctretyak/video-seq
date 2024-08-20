@@ -36,9 +36,8 @@ export class VideoTree {
     }
 
     const video = this.getVideo();
-    video.pause();
-    // video.currentTime = 0.001;
     video.controls = true;
+    await this.resetVideo();
   }
 
   addEvents() {
@@ -82,13 +81,18 @@ export class VideoTree {
     return this.sprite.texture.source.resource as any as HTMLVideoElement;
   }
 
-  resetVideo() {
+  async resetVideo() {
     const video = this.getVideo();
     video.pause();
     video.load();
-    video.addEventListener("loadeddata", () => {
-      video.pause();
-      video.currentTime = 0;
+    return new Promise<void>((resolve) =>{
+      const listener = () => {
+        video.pause();
+        video.currentTime = 0;
+        video.removeEventListener("loadeddata", listener);
+        resolve();
+      }
+      video.addEventListener("loadeddata", listener)
     })
   }
 
