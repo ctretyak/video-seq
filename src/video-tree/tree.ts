@@ -85,21 +85,21 @@ export class VideoTree {
     const video = this.getVideo();
     video.pause();
     video.currentTime = 0;
-    if (this.iOS()) {
-      /* you have to call load for ios devices
-       * https://stackoverflow.com/questions/49792768/js-html5-audio-why-is-canplaythrough-not-fired-on-ios-safari
-       * */
-      video.load();
-      return new Promise<void>((resolve) => {
-        const listener = () => {
-          video.pause();
-          video.currentTime = 0;
-          video.removeEventListener("loadeddata", listener);
-          resolve();
-        }
-        video.addEventListener("loadeddata", listener)
-      })
-    }
+    // if (this.iOS()) {
+    //   /* you have to call load for ios devices
+    //    * https://stackoverflow.com/questions/49792768/js-html5-audio-why-is-canplaythrough-not-fired-on-ios-safari
+    //    * */
+    //   video.load();
+    //   return new Promise<void>((resolve) => {
+    //     const listener = () => {
+    //       video.pause();
+    //       video.currentTime = 0;
+    //       video.removeEventListener("loadeddata", listener);
+    //       resolve();
+    //     }
+    //     video.addEventListener("loadeddata", listener)
+    //   })
+    // }
   }
 
   play() {
