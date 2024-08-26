@@ -28,7 +28,7 @@ export class VideoTree {
   async loadSprites() {
     console.info("loading sprite" + this.src);
     const [texture] = await Promise.all([
-      Assets.load({ src: this.src, data: { autoPlay: false, preload: "auto" } }),
+      Assets.load({ src: this.src }),
       ...this.nodes.map((node) => node.loadSprites()),
     ]);
     console.info("loading sprite end" + this.src);
