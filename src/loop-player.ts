@@ -20,9 +20,9 @@ export class LoopPlayer extends Container {
     });
     this.addChild(this.text);
 
-    let eventsText: Text | undefined; 
-    if(debug){
-       eventsText = new Text({
+    let eventsText: Text | undefined;
+    if (debug) {
+      eventsText = new Text({
         text: '{}',
         style: { fill: '#fff' },
       });
@@ -35,14 +35,17 @@ export class LoopPlayer extends Container {
     this.progress.y = this.text.height;
     this.addChild(this.progress);
 
-    this.playerWrapper = debug ?  document.getElementById('player-wrapper'): undefined;
+    this.playerWrapper = debug ? document.getElementById('player-wrapper') : undefined;
 
     this.tree = VideoTree.fromJSON(json, 0, eventsText);
   }
 
   async play() {
+    console.log("LOADING SPRITES: start");
     await this.tree.loadSprites();
+    console.log("LOADING SPRITES: end");
     this.playNextVideo();
+    :w
     this.playing = true;
   }
 
