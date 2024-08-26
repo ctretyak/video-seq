@@ -35,7 +35,6 @@ if (paramsTree) {
 
   const loopPlayer = new LoopPlayer(videoTree, searchParams.has('debug'));
   button.on('pointertap', () => {
-    alert("button clicked");
     button.destroy();
 
     app.stage.addChild(loopPlayer);
