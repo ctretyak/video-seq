@@ -41,9 +41,9 @@ export class LoopPlayer extends Container {
   }
 
   async play() {
-    console.log("LOADING SPRITES: start");
+    console.info("LOADING SPRITES: start");
     await this.tree.loadSprites();
-    console.log("LOADING SPRITES: end");
+    console.info("LOADING SPRITES: end");
     this.playNextVideo();
     this.playing = true;
   }
