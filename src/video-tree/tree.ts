@@ -41,6 +41,7 @@ export class VideoTree {
 
     const video = this.getVideo();
     video.controls = true;
+    video.muted = true;
     await this.resetVideo();
   }
 
