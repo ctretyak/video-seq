@@ -91,7 +91,7 @@ export class VideoTree {
     video.pause();
     const onSeeked = ()=> {
       video.removeEventListener("seeked", onSeeked);
-      video.play();
+      video.pause();
     }
     video.addEventListener("seeked", onSeeked);
     video.currentTime = 0;
