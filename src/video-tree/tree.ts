@@ -91,7 +91,7 @@ export class VideoTree {
     video.pause();
     video.currentTime = 0;
     video.play();
-    video.pause();
+    // video.pause();
     // if (this.iOS()) {
     //   /* you have to call load for ios devices
     //    * https://stackoverflow.com/questions/49792768/js-html5-audio-why-is-canplaythrough-not-fired-on-ios-safari
