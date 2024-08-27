@@ -1,9 +1,13 @@
-const [, canvas, play, pause, seek0] = [
+const [player, canvas, play, pause, seek0, playerInvisible, playerDisplayNone, playerLeft, playerReset] = [
   document.getElementById("player") as HTMLVideoElement,
   document.getElementById("canvas") as HTMLCanvasElement,
   document.getElementById("play") as HTMLButtonElement,
   document.getElementById("pause") as HTMLButtonElement,
   document.getElementById("seek-0") as HTMLButtonElement,
+  document.getElementById("player-invisible") as HTMLButtonElement,
+  document.getElementById("player-display-none") as HTMLButtonElement,
+  document.getElementById("player-left") as HTMLButtonElement,
+  document.getElementById("player-reset") as HTMLButtonElement,
 ]
 
 const video = document.createElement("video");
@@ -11,6 +15,8 @@ video.src = "https://ctretyak.github.io/video-test/monster_1.mp4.mp4";
 video.controls = true;
 video.muted = true;
 video.playsInline = true;
+
+player.appendChild(video)
 
 
 play.onclick = () => {
@@ -24,6 +30,26 @@ pause.onclick = () => {
 seek0.onclick = () => {
   video.currentTime = 0;
 };
+
+playerInvisible.onclick = () => {
+  player.style.visibility = "hidden";
+}
+
+playerDisplayNone.onclick = () => {
+  player.style.display = "none";
+}
+
+playerLeft.onclick = () => {
+  player.style.position = "absolute";
+  player.style.left = "-9999px";
+}
+
+playerReset.onclick = () => {
+  player.style.visibility = "initial";
+  player.style.display = "initial";
+  player.style.position = "initial";
+  player.style.left = "initial";
+}
 
 // let paintCount = 0;
 let startTime = 0.0;
