@@ -40,6 +40,7 @@ export class VideoTree {
     }
 
     const video = this.getVideo();
+    document.getElementById("hidden-area")?.appendChild(video);
     video.controls = true;
     video.muted = true;
     await this.resetVideo();
@@ -87,14 +88,17 @@ export class VideoTree {
   }
 
   async resetVideo() {
-    const video = this.getVideo();
-    video.pause();
-    const onSeeked = ()=> {
-      video.removeEventListener("seeked", onSeeked);
+    return new Promise<void>(resolve => {
+      const video = this.getVideo();
       video.pause();
-    }
-    video.addEventListener("seeked", onSeeked);
-    video.currentTime = 0;
+      const onSeeked = ()=> {
+        video.removeEventListener("seeked", onSeeked);
+        video.pause();
+        resolve();
+      }
+      video.addEventListener("seeked", onSeeked);
+      video.currentTime = 0;
+    });
     // video.pause();
     // if (this.iOS()) {
     //   /* you have to call load for ios devices
