@@ -89,8 +89,12 @@ export class VideoTree {
   async resetVideo() {
     const video = this.getVideo();
     video.pause();
+    const onSeeked = ()=> {
+      video.removeEventListener("seeked", onSeeked);
+      video.play();
+    }
+    video.addEventListener("seeked", onSeeked);
     video.currentTime = 0;
-    video.play();
     // video.pause();
     // if (this.iOS()) {
     //   /* you have to call load for ios devices
