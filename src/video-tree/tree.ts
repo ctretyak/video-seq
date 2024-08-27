@@ -89,6 +89,7 @@ export class VideoTree {
     const video = this.getVideo();
     video.pause();
     video.currentTime = 0;
+    video.play();
     if (this.iOS()) {
       /* you have to call load for ios devices
        * https://stackoverflow.com/questions/49792768/js-html5-audio-why-is-canplaythrough-not-fired-on-ios-safari
@@ -98,6 +99,8 @@ export class VideoTree {
         const listener = () => {
           video.pause();
           video.currentTime = 0;
+          video.play();
+          video.pause();
           video.removeEventListener("loadeddata", listener);
           resolve();
         }
