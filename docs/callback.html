@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/video-seq/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+    <style>
+      #wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+      }
+
+      #player,
+      #canvas {
+        max-height: 40vh;
+        width: fit-content;
+      }
+    </style>
+    <script type="module" crossorigin src="/video-seq/assets/callback-BU4oLcEl.js"></script>
+    <link rel="modulepreload" crossorigin href="/video-seq/assets/modulepreload-polyfill-B5Qt9EMX.js">
+  </head>
+  <body style="margin: 0; overflow: hidden">
+    <div id="wrapper">
+      <video
+        src="https://ctretyak.github.io/video-test/monster_1.mp4.mp4"
+        controls
+        autoplay
+        id="player"
+      ></video>
+      <canvas id="canvas"></canvas>
+      <div id="buttons">
+        <button id="play">Play</button>
+        <button id="pause">Pause</button>
+        <button id="seek-0">Seek 0</button>
+      </div>
+    </div>
+  </body>
+</html>
