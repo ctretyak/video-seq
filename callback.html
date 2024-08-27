@@ -13,6 +13,7 @@
       }
 
       #player,
+      #player video,
       #canvas {
         max-height: 40vh;
         width: fit-content;
@@ -21,13 +22,14 @@
   </head>
   <body style="margin: 0; overflow: hidden">
     <div id="wrapper">
-      <video
-        src="https://ctretyak.github.io/video-test/monster_1.mp4.mp4"
-        controls
-        autoplay
-        playsinline
-        id="player"
-      ></video>
+      <div id="player">
+        <!-- <video -->
+        <!--   src="https://ctretyak.github.io/video-test/monster_1.mp4.mp4" -->
+        <!--   controls -->
+        <!--   autoplay -->
+        <!--   playsinline -->
+        <!-- ></video> -->
+      </div>
       <canvas id="canvas"></canvas>
       <div id="buttons">
         <button id="play">Play</button>

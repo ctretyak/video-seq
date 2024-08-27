@@ -1,10 +1,16 @@
-const [video, canvas, play, pause, seek0] = [
+const [, canvas, play, pause, seek0] = [
   document.getElementById("player") as HTMLVideoElement,
   document.getElementById("canvas") as HTMLCanvasElement,
   document.getElementById("play") as HTMLButtonElement,
   document.getElementById("pause") as HTMLButtonElement,
   document.getElementById("seek-0") as HTMLButtonElement,
 ]
+
+const video = document.createElement("video");
+video.src = "https://ctretyak.github.io/video-test/monster_1.mp4.mp4";
+video.controls = true;
+video.muted = true;
+video.playsInline = true;
 
 
 play.onclick = () => {
