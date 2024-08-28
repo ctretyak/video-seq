@@ -65,16 +65,19 @@ export class LoopPlayer {
     //   this.playNextVideo();
     // }
     // nextVideoTree.video.addEventListener('ended', ended)
-    const frameRequestCallback: FrameRequestCallback = ()=> {
-        this.metadata[this.getVideoName(nextVideoTree.video)].video = {
-          currentTime: nextVideoTree.video.currentTime,
-          duration: nextVideoTree.video.duration,
-          ended: nextVideoTree.video.ended,
-          paused: nextVideoTree.video.paused,
-          seeking: nextVideoTree.video.seeking,
-        };
-        this.updateMetadata();
-      if(nextVideoTree.video.ended){
+    const frameRequestCallback: FrameRequestCallback = () => {
+      const { currentTime, duration } = nextVideoTree.video;
+      const toTheEnd = duration - currentTime;
+      this.metadata[this.getVideoName(nextVideoTree.video)].video = {
+        currentTime: nextVideoTree.video.currentTime,
+        duration: nextVideoTree.video.duration,
+        ended: nextVideoTree.video.ended,
+        paused: nextVideoTree.video.paused,
+        seeking: nextVideoTree.video.seeking,
+        toTheEnd
+      };
+      this.updateMetadata();
+      if (nextVideoTree.video.ended || duration - currentTime < 1000/60/1000) {
         this.playNextVideo();
         return;
       }
