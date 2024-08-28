@@ -7,10 +7,13 @@ export class LoopPlayer {
 
   private currentVideoTree: VideoTree | undefined;
 
-  constructor(videoTree: VideoTree, canvas: HTMLCanvasElement, hiddenPlayersElem: HTMLElement) {
+  constructor(videoTree: VideoTree, canvas: HTMLCanvasElement, hiddenPlayersElem: HTMLElement, debug = false) {
     this.tree = videoTree;
     this.canvas = canvas;
     this.hiddenPlayersElem = hiddenPlayersElem;
+    if(debug){
+      this.hiddenPlayersElem.classList.add('debug');
+    }
   }
 
   async play() {

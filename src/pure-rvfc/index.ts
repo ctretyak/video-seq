@@ -10,11 +10,14 @@ if (paramsTree) {
   jsonVideoTree = JSON.parse(paramsTree) as any;
 }
 
+const debug = searchParams.has("debug");
+
 const videoTree = VideoTree.fromJSON(jsonVideoTree);
 const loopPlayer = new LoopPlayer(
   videoTree,
   document.getElementById('canvas') as HTMLCanvasElement,
-  document.getElementById('hidden-players') as HTMLElement
+  document.getElementById('hidden-players') as HTMLElement,
+  debug
 );
 
 
