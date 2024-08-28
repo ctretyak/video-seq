@@ -24,18 +24,18 @@ export class VideoTree {
     this.video = document.createElement('video');
     this.video.playsInline = true;
     this.video.preload = "auto";
-    this.video.controls = false;
+    this.video.controls = true;
     this.video.muted = true;
     this.video.autoplay = true;
     this.video.src = this.src;
 
     const videoLoadedPromise = new Promise<HTMLVideoElement>((resolve) => {
       const canPlay = () => {
-        // this.video.pause();
         this.video.removeEventListener('canplay', canPlay);
 
         const loaded = () => {
           this.video.removeEventListener('canplaythrough', loaded);
+          this.video.currentTime = this.video.duration * Math.random();
           resolve(this.video);
         }
 

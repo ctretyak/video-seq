@@ -56,8 +56,23 @@
         flex: 1;
         width: 10%;
       }
+
+      #metadata {
+        display: none;
+      }
+      #metadata.debug {
+        display: block;
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        background-color: black;
+        color: white;
+        padding: 4px;
+        z-index: 200;
+      }
     </style>
-    <script type="module" crossorigin src="/video-seq/assets/purervfc-DG5igel2.js"></script>
+    <script type="module" crossorigin src="/video-seq/assets/purervfc-Dl_4R4ye.js"></script>
     <link rel="modulepreload" crossorigin href="/video-seq/assets/modulepreload-polyfill-B5Qt9EMX.js">
     <link rel="modulepreload" crossorigin href="/video-seq/assets/video-tree-C_pDbh0c.js">
   </head>
@@ -65,5 +80,6 @@
     <div id="hidden-players"></div>
     <canvas id="canvas"></canvas>
     <button id="play">Play</button>
+    <pre id="metadata">123</pre>
   </body>
 </html>

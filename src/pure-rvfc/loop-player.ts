@@ -4,6 +4,7 @@ export class LoopPlayer {
   tree: VideoTree;
   canvas: HTMLCanvasElement;
   hiddenPlayersElem: HTMLElement;
+  metadata: Record<string,any> = {};
 
   private currentVideoTree: VideoTree | undefined;
 
@@ -11,8 +12,9 @@ export class LoopPlayer {
     this.tree = videoTree;
     this.canvas = canvas;
     this.hiddenPlayersElem = hiddenPlayersElem;
-    if(debug){
+    if (debug) {
       this.hiddenPlayersElem.classList.add('debug');
+      document.getElementById("metadata")?.classList.add('debug');
     }
   }
 
@@ -28,6 +30,7 @@ export class LoopPlayer {
   }
 
   playNextVideo() {
+    const metadataElem = document.getElementById("metadata");
     const nextVideoTree = this.currentVideoTree?.getNextVideoTree() ?? this.tree;
     nextVideoTree.play();
     const ctx = this.canvas.getContext('2d');
@@ -50,10 +53,17 @@ export class LoopPlayer {
       }
 
       ctx?.drawImage(nextVideoTree.video, 0, 0, dw, dh);
+      if (metadataElem) {
+        const metadataString = JSON.stringify(this.metadata, null, 2);
+        if (metadataElem.innerHTML !== metadataString) {
+          metadataElem.innerHTML = JSON.stringify(this.metadata, null, 2);
+        }
+      }
       nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
     }
     nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
     const ended = () => {
+      this.metadata.ended = Date.now();
       nextVideoTree.video.removeEventListener('ended', ended);
       this.playNextVideo();
     }
