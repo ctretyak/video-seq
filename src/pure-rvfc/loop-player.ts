@@ -28,6 +28,24 @@ export class LoopPlayer {
       this.addEventsCallbacks(video);
     });
 
+    const frameRequestCallback: FrameRequestCallback = () => {
+      allVideo.forEach((video) => {
+        const { currentTime, duration, ended, paused, seeking  } = video;
+        const tillEnd = duration - currentTime;
+        this.metadata[this.getVideoName(video)].video = {
+          currentTime: currentTime.toFixed(3),
+          duration: duration.toFixed(3),
+          ended,
+          paused,
+          seeking,
+          tillEnd: tillEnd.toFixed(3),
+        };
+      })
+      this.updateMetadata();
+    }
+
+    window.requestAnimationFrame(frameRequestCallback);
+
     this.playNextVideo();
   }
 
@@ -67,16 +85,8 @@ export class LoopPlayer {
     const frameRequestCallback: FrameRequestCallback = () => {
       const { currentTime, duration } = nextVideoTree.video;
       const tillEnd = duration - currentTime;
-      this.metadata[this.getVideoName(nextVideoTree.video)].video = {
-        currentTime: currentTime.toFixed(3),
-        duration: nextVideoTree.video.duration,
-        ended: nextVideoTree.video.ended,
-        paused: nextVideoTree.video.paused,
-        seeking: nextVideoTree.video.seeking,
-        tillEnd: tillEnd.toFixed(3),
-      };
-      this.updateMetadata();
       if (nextVideoTree.video.ended || tillEnd < 0.06) {
+        this.metadata[this.getVideoName(nextVideoTree.video)].raf_ended = Date.now();
         this.playNextVideo();
         return;
       }
