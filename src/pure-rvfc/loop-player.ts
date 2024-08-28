@@ -46,8 +46,8 @@ export class LoopPlayer {
     const videoFrameCallback: VideoFrameRequestCallback = () => {
 
       if (ctx) {
-        ctx.canvas.width = window.innerWidth;
-        ctx.canvas.height = window.innerHeight;
+        ctx.canvas.width = Math.min(screen.width, window.innerWidth);
+        ctx.canvas.height = Math.min(screen.height, window.innerHeight);
       }
 
       const video = nextVideoTree.video;;
