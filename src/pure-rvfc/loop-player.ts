@@ -19,7 +19,7 @@ export class LoopPlayer {
   }
 
   async play() {
-    const allVideo = await this.tree.load(video=> this.addEventsCallbacks(video));
+    const allVideo = await this.tree.load(video => this.addEventsCallbacks(video));
 
     const hiddenPlayersElem = document.getElementById('hidden-players');
     allVideo.forEach((video) => {
@@ -29,7 +29,7 @@ export class LoopPlayer {
 
     const frameRequestCallback: FrameRequestCallback = () => {
       allVideo.forEach((video) => {
-        const { currentTime, duration, ended, paused, seeking  } = video;
+        const { currentTime, duration, ended, paused, seeking } = video;
         const tillEnd = duration - currentTime;
         this.metadata[this.getVideoName(video)].video = {
           currentTime: currentTime.toFixed(3),
@@ -87,11 +87,13 @@ export class LoopPlayer {
     const frameRequestCallback: FrameRequestCallback = () => {
       const { currentTime, duration } = nextVideoTree.video;
       const tillEnd = duration - currentTime;
-      if (nextVideoTree.video.ended || tillEnd < 0.06) {
+      if (nextVideoTree.video.ended) {
         this.metadata[this.getVideoName(nextVideoTree.video)].raf_ended = Date.now();
         nextVideoTree.video.cancelVideoFrameCallback(videoFrameCallbackId)
         this.playNextVideo();
         return;
+      } else if (tillEnd > 0 && tillEnd < 0.06) {
+        nextVideoTree.video.currentTime = nextVideoTree.video.duration;
       }
       window.requestAnimationFrame(frameRequestCallback);
     }
