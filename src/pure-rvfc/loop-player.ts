@@ -4,7 +4,7 @@ export class LoopPlayer {
   tree: VideoTree;
   canvas: HTMLCanvasElement;
   hiddenPlayersElem: HTMLElement;
-  metadata: Record<string,any> = {};
+  metadata: Record<string, any> = {};
 
   private currentVideoTree: VideoTree | undefined;
 
@@ -23,14 +23,15 @@ export class LoopPlayer {
 
     const hiddenPlayersElem = document.getElementById('hidden-players');
     allVideo.forEach((video) => {
+      this.metadata[this.getVideoName(video)] = { last_events: [] };
       hiddenPlayersElem?.appendChild(video);
+      this.addEventsCallbacks(video);
     });
 
     this.playNextVideo();
   }
 
   playNextVideo() {
-    const metadataElem = document.getElementById("metadata");
     const nextVideoTree = this.currentVideoTree?.getNextVideoTree() ?? this.tree;
     nextVideoTree.play();
     const ctx = this.canvas.getContext('2d');
@@ -53,12 +54,7 @@ export class LoopPlayer {
       }
 
       ctx?.drawImage(nextVideoTree.video, 0, 0, dw, dh);
-      if (metadataElem) {
-        const metadataString = JSON.stringify(this.metadata, null, 2);
-        if (metadataElem.innerHTML !== metadataString) {
-          metadataElem.innerHTML = JSON.stringify(this.metadata, null, 2);
-        }
-      }
+      this.updateMetadata();
       nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
     }
     nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
@@ -70,5 +66,57 @@ export class LoopPlayer {
     nextVideoTree.video.addEventListener('ended', ended)
 
     this.currentVideoTree = nextVideoTree;
+  }
+
+  updateMetadata() {
+    const metadataElem = document.getElementById("metadata");
+    if (metadataElem) {
+      const metadataString = JSON.stringify(this.metadata, null, 2);
+      if (metadataElem.innerHTML !== metadataString) {
+        metadataElem.innerHTML = JSON.stringify(this.metadata, null, 2);
+      }
+    }
+  }
+
+  getVideoName(video: HTMLVideoElement) {
+    return video.currentSrc.replace(/(\.mp4)+$/gm, "").slice(-8);
+  }
+
+  addEventsCallbacks(video: HTMLVideoElement) {
+    [
+      "audioprocess",
+      "canplay",
+      "canplaythrough",
+      "complete",
+      "durationchange",
+      "emptied",
+      "ended",
+      "error",
+      "loadeddata",
+      "loadedmetadata",
+      "loadstart",
+      "pause",
+      "play",
+      "playing",
+      "progress",
+      "ratechange",
+      "seeked",
+      "seeking",
+      "stalled",
+      "suspend",
+      // "timeupdate",
+      "volumechange",
+      "waiting"
+    ].forEach((event) => {
+      video.addEventListener(event, () => {
+        const lastEvents: string[] = this.metadata[this.getVideoName(video)].last_events;
+        lastEvents.push(event);
+        if (lastEvents.length > 5) {
+          lastEvents.shift();
+        }
+        this.metadata[this.getVideoName(video)].last_event_ts = Date.now();
+        this.updateMetadata();
+      })
+    })
   }
 }
