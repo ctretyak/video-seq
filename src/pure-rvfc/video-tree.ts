@@ -26,6 +26,7 @@ export class VideoTree {
     this.video.preload = "auto";
     this.video.controls = false;
     this.video.muted = true;
+    this.video.autoplay = true;
     this.video.src = this.src;
 
     const videoLoadedPromise = new Promise<HTMLVideoElement>((resolve) => {
