@@ -92,6 +92,7 @@ export class LoopPlayer {
         this.metadata[this.getVideoName(nextVideoTree.video)].raf_ended = Date.now();
         nextVideoTree.video.cancelVideoFrameCallback(videoFrameCallbackId)
         this.playNextVideo();
+        nextVideoTree.video.pause();
         nextVideoTree.video.currentTime = 0;
         return;
       } else if (tillEnd > 0 && tillEnd < 0.06 && prevCurrTime === currentTime) {
