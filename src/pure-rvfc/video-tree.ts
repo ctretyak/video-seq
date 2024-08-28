@@ -35,7 +35,8 @@ export class VideoTree {
 
         const loaded = () => {
           this.video.removeEventListener('canplaythrough', loaded);
-          this.video.currentTime = this.video.duration * Math.random();
+          this.video.pause();
+          this.video.currentTime = 0;
           resolve(this.video);
         }
 
