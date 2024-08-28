@@ -54,6 +54,7 @@ export class LoopPlayer {
     const nextVideoTree = this.currentVideoTree?.getNextVideoTree() ?? this.tree;
     nextVideoTree.play();
     const ctx = this.canvas.getContext('2d');
+    let videoFrameCallbackId = -1;
     const videoFrameCallback: VideoFrameRequestCallback = (_now, _metadata) => {
 
       if (ctx) {
@@ -74,9 +75,9 @@ export class LoopPlayer {
 
       ctx?.drawImage(nextVideoTree.video, 0, 0, dw, dh);
       this.updateMetadata();
-      nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
+      videoFrameCallbackId = nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
     }
-    nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
+    videoFrameCallbackId = nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
     // const ended = () => {
     //   this.metadata.ended = Date.now();
     //   nextVideoTree.video.removeEventListener('ended', ended);
@@ -88,6 +89,7 @@ export class LoopPlayer {
       const tillEnd = duration - currentTime;
       if (nextVideoTree.video.ended || tillEnd < 0.06) {
         this.metadata[this.getVideoName(nextVideoTree.video)].raf_ended = Date.now();
+        nextVideoTree.video.cancelVideoFrameCallback(videoFrameCallbackId)
         this.playNextVideo();
         return;
       }
