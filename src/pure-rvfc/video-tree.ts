@@ -31,7 +31,7 @@ export class VideoTree {
 
     const videoLoadedPromise = new Promise<HTMLVideoElement>((resolve) => {
       const canPlay = () => {
-        this.video.pause();
+        // this.video.pause();
         this.video.removeEventListener('canplay', canPlay);
 
         const loaded = () => {
