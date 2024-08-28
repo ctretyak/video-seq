@@ -67,17 +67,17 @@ export class LoopPlayer {
     // nextVideoTree.video.addEventListener('ended', ended)
     const frameRequestCallback: FrameRequestCallback = () => {
       const { currentTime, duration } = nextVideoTree.video;
-      const toTheEnd = duration - currentTime;
+      const tillEnd = duration - currentTime;
       this.metadata[this.getVideoName(nextVideoTree.video)].video = {
         currentTime: nextVideoTree.video.currentTime,
         duration: nextVideoTree.video.duration,
         ended: nextVideoTree.video.ended,
         paused: nextVideoTree.video.paused,
         seeking: nextVideoTree.video.seeking,
-        toTheEnd
+        tillEnd
       };
       this.updateMetadata();
-      if (nextVideoTree.video.ended || duration - currentTime < 1000/60/1000) {
+      if (nextVideoTree.video.ended || tillEnd < 0.06) {
         this.playNextVideo();
         return;
       }
