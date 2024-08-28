@@ -2,16 +2,14 @@ import { VideoTree } from "./video-tree";
 
 export class LoopPlayer {
   tree: VideoTree;
-  canvas: HTMLCanvasElement;
   hiddenPlayersElem: HTMLElement;
   metadata: Record<string, any> = { fps: undefined };
   debug = false;
 
   private currentVideoTree: VideoTree | undefined;
 
-  constructor(videoTree: VideoTree, canvas: HTMLCanvasElement, hiddenPlayersElem: HTMLElement, debug = false) {
+  constructor(videoTree: VideoTree, hiddenPlayersElem: HTMLElement, debug = false) {
     this.tree = videoTree;
-    this.canvas = canvas;
     this.hiddenPlayersElem = hiddenPlayersElem;
     this.debug = debug;
     if (debug) {
@@ -66,31 +64,6 @@ export class LoopPlayer {
   playNextVideo() {
     const nextVideoTree = this.currentVideoTree?.getNextVideoTree() ?? this.tree;
     nextVideoTree.play();
-    const ctx = this.canvas.getContext('2d');
-    let videoFrameCallbackId = -1;
-    const videoFrameCallback: VideoFrameRequestCallback = (_now, _metadata) => {
-
-      if (ctx) {
-        ctx.canvas.width = Math.min(screen.width, window.innerWidth);
-        ctx.canvas.height = Math.min(screen.height, window.innerHeight);
-      }
-
-      const video = nextVideoTree.video;;
-      const { width: screenWidth, height: screenHeight } = this.canvas.getBoundingClientRect();
-
-      let dw = 100;
-      let dh = 100;
-      if (video.videoWidth && video.videoHeight) {
-        const scale = Math.min(screenWidth / video.videoWidth, screenHeight / video.videoHeight);
-        dw = video.videoWidth * scale;
-        dh = video.videoHeight * scale;
-      }
-
-      ctx?.drawImage(nextVideoTree.video, 0, 0, dw, dh);
-      this.updateMetadata();
-      videoFrameCallbackId = nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
-    }
-    videoFrameCallbackId = nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
     // const ended = () => {
     //   this.metadata.ended = Date.now();
     //   nextVideoTree.video.removeEventListener('ended', ended);
@@ -102,7 +75,6 @@ export class LoopPlayer {
       const tillEnd = duration - currentTime;
       if (nextVideoTree.video.ended) {
         this.metadata[this.getVideoName(nextVideoTree.video)].raf_ended = Date.now();
-        nextVideoTree.video.cancelVideoFrameCallback(videoFrameCallbackId)
         nextVideoTree.video.pause();
         this.playNextVideo();
         nextVideoTree.video.currentTime = 0;
@@ -162,14 +134,10 @@ export class LoopPlayer {
       "waiting"
     ].forEach((event) => {
       video.addEventListener(event, () => {
-        const videoName = this.getVideoName(video);
-        if(!videoName){
+        const lastEvents: string[] = this.metadata[this.getVideoName(video)]?.last_events;
+        if(!lastEvents) {
           return;
         }
-        if(!this.metadata[videoName]) {
-          this.metadata[videoName] = { last_events: [] };
-        };
-        const lastEvents: string[] = this.metadata[videoName].last_events;
         lastEvents.push(event);
         if (lastEvents.length > 4) {
           lastEvents.shift();
