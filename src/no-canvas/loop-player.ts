@@ -64,6 +64,10 @@ export class LoopPlayer {
   playNextVideo() {
     const nextVideoTree = this.currentVideoTree?.getNextVideoTree() ?? this.tree;
     nextVideoTree.play();
+    nextVideoTree.video.style.zIndex = "11";
+    if(this.currentVideoTree) {
+      this.currentVideoTree.video.style.zIndex = "10";
+    }
     // const ended = () => {
     //   this.metadata.ended = Date.now();
     //   nextVideoTree.video.removeEventListener('ended', ended);
