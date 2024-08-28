@@ -42,6 +42,8 @@ export class LoopPlayer {
         };
       })
       this.updateMetadata();
+
+      window.requestAnimationFrame(frameRequestCallback);
     }
 
     window.requestAnimationFrame(frameRequestCallback);
