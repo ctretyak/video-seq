@@ -35,15 +35,19 @@
         left: 0;
         right: 0;
         text-align: center;
+        z-index: 9999;
       }
 
       #hidden-players.debug {
         position: fixed;
         bottom: 0;
         display: flex;
-        justify-items: center;
+        justify-content: center;
+        align-items: center;
+
         flex-wrap: nowrap;
         max-height: 30vh;
+        max-width: 100%;
       }
       #hidden-players.debug video {
         position: static;
