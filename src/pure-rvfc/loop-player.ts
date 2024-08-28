@@ -95,7 +95,6 @@ export class LoopPlayer {
     //   this.playNextVideo();
     // }
     // nextVideoTree.video.addEventListener('ended', ended)
-    let prevCurrTime = -1;
     const frameRequestCallback: FrameRequestCallback = () => {
       const { currentTime, duration } = nextVideoTree.video;
       const tillEnd = duration - currentTime;
@@ -106,10 +105,9 @@ export class LoopPlayer {
         this.playNextVideo();
         nextVideoTree.video.currentTime = 0;
         return;
-      } else if (tillEnd > 0 && tillEnd < 0.06 && prevCurrTime === currentTime) {
+      } else if (this.iOS() && tillEnd > 0 && tillEnd < 0.06) {
         nextVideoTree.video.currentTime = nextVideoTree.video.duration;
       }
-      prevCurrTime = currentTime;
       window.requestAnimationFrame(frameRequestCallback);
     }
 
