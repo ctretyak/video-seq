@@ -11,21 +11,6 @@ export class LoopPlayer {
     this.tree = videoTree;
     this.canvas = canvas;
     this.hiddenPlayersElem = hiddenPlayersElem;
-
-
-    // window.addEventListener('resize', resizeCanvas, false);
-    // window.addEventListener('orientationchange', resizeCanvas, false);
-    // window.addEventListener('fullscreenchange', resizeCanvas, false);
-    // window.addEventListener('mozfullscreenchange', resizeCanvas, false);
-    // window.addEventListener('webkitfullscreenchange', resizeCanvas, false);
-    //
-    //
-    // function resizeCanvas(event?: any) {
-    //     canvas.width = (event?.target || window ).innerWidth;
-    //     canvas.height = (event?.target || window).innerHeight;
-    // }
-    //
-    // resizeCanvas();
   }
 
   async play() {

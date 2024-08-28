@@ -19,10 +19,11 @@ const loopPlayer = new LoopPlayer(
 
 
 const playButton = document.getElementById('play') as HTMLButtonElement;
-playButton?.addEventListener('click', () => {
+playButton?.addEventListener('click', async () => {
   playButton.innerHTML = 'Loading...';
   playButton.disabled = true;
-  loopPlayer.play();
+  await loopPlayer.play();
+  playButton.style.display = 'none';
 });
 
 

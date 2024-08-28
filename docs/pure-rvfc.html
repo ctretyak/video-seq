@@ -14,15 +14,16 @@
       }
 
       #canvas {
+        position: absolute;
+        top: 0;
         z-index: 100;
       }
 
-      #hidden-players {
-        z-index: 10;
-      }
-
+      #hidden-players,
       #hidden-players video {
         position: absolute;
+        max-width: 100vw;
+        max-height: 100vh;
         z-index: 10;
       }
 
@@ -35,13 +36,13 @@
         text-align: center;
       }
     </style>
-    <script type="module" crossorigin src="/video-seq/assets/purervfc-BhuvEV7F.js"></script>
+    <script type="module" crossorigin src="/video-seq/assets/purervfc-C3toQw2W.js"></script>
     <link rel="modulepreload" crossorigin href="/video-seq/assets/modulepreload-polyfill-B5Qt9EMX.js">
     <link rel="modulepreload" crossorigin href="/video-seq/assets/video-tree-C_pDbh0c.js">
   </head>
   <body style="margin: 0; overflow: hidden">
+    <div id="hidden-players" class="debug"></div>
     <canvas id="canvas"></canvas>
-    <div id="hidden-players"></div>
     <button id="play">Play</button>
   </body>
 </html>
