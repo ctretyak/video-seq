@@ -66,9 +66,15 @@ export class LoopPlayer {
     // }
     // nextVideoTree.video.addEventListener('ended', ended)
     const frameRequestCallback: FrameRequestCallback = ()=> {
-      if(nextVideoTree.video.ended){
-        this.metadata[this.getVideoName(nextVideoTree.video)].ended = Date.now();
+        this.metadata[this.getVideoName(nextVideoTree.video)].video = {
+          currentTime: nextVideoTree.video.currentTime,
+          duration: nextVideoTree.video.duration,
+          ended: nextVideoTree.video.ended,
+          paused: nextVideoTree.video.paused,
+          seeking: nextVideoTree.video.seeking,
+        };
         this.updateMetadata();
+      if(nextVideoTree.video.ended){
         this.playNextVideo();
         return;
       }
