@@ -59,12 +59,23 @@ export class LoopPlayer {
       nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
     }
     nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
-    const ended = () => {
-      this.metadata.ended = Date.now();
-      nextVideoTree.video.removeEventListener('ended', ended);
-      this.playNextVideo();
+    // const ended = () => {
+    //   this.metadata.ended = Date.now();
+    //   nextVideoTree.video.removeEventListener('ended', ended);
+    //   this.playNextVideo();
+    // }
+    // nextVideoTree.video.addEventListener('ended', ended)
+    const frameRequestCallback: FrameRequestCallback = ()=> {
+      if(nextVideoTree.video.ended){
+        this.metadata[this.getVideoName(nextVideoTree.video)].ended = Date.now();
+        this.updateMetadata();
+        this.playNextVideo();
+        return;
+      }
+      window.requestAnimationFrame(frameRequestCallback);
     }
-    nextVideoTree.video.addEventListener('ended', ended)
+
+    window.requestAnimationFrame(frameRequestCallback)
 
     this.currentVideoTree = nextVideoTree;
   }
