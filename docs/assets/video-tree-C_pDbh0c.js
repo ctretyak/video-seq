@@ -1,0 +1,1 @@
+const t={src:"https://ctretyak.github.io/video-test/monster_1.mp4.mp4",nodes:[{src:"https://ctretyak.github.io/video-test/monster_2.mp4.mp4",nodes:[{src:"https://ctretyak.github.io/video-test/monster_3.mp4.mp4"}]}]};export{t as V};

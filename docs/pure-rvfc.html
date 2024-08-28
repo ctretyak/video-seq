@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/video-seq/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+    <style>
+      #canvas {
+        width: 100vw;
+        height: 100vh;
+        z-index: 100;
+      }
+
+      #hidden-players {
+        z-index: 10;
+      }
+
+      #hidden-players video {
+        position: absolute;
+        z-index: 10;
+      }
+    </style>
+    <script type="module" crossorigin src="/video-seq/assets/purervfc-BGDuLanf.js"></script>
+    <link rel="modulepreload" crossorigin href="/video-seq/assets/modulepreload-polyfill-B5Qt9EMX.js">
+    <link rel="modulepreload" crossorigin href="/video-seq/assets/video-tree-C_pDbh0c.js">
+  </head>
+  <body style="margin: 0; overflow: hidden">
+    <canvas id="canvas"></canvas>
+    <div id="hidden-players"></div>
+  </body>
+</html>

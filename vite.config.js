@@ -6,6 +6,7 @@ export default {
       input: {
         main: 'index.html',
         callback: 'callback.html',
+        purervfc: 'pure-rvfc.html',
       },
     },
   }

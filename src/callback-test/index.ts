@@ -71,7 +71,6 @@ const updateCanvas = (now: any) => {
   }
   console.log(video.videoWidth, video.videoHeight)
 
-  debugger
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
   // const elapsed = (now - startTime) / 1000.0;
