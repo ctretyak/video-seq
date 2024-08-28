@@ -4,7 +4,7 @@ export class LoopPlayer {
   tree: VideoTree;
   canvas: HTMLCanvasElement;
   hiddenPlayersElem: HTMLElement;
-  metadata: Record<string, any> = {};
+  metadata: Record<string, any> = {fps: undefined};
 
   private currentVideoTree: VideoTree | undefined;
 
@@ -27,7 +27,18 @@ export class LoopPlayer {
       hiddenPlayersElem?.appendChild(video);
     });
 
+    let lastCalledTime: number;
     const frameRequestCallback: FrameRequestCallback = () => {
+      if (!lastCalledTime) {
+        lastCalledTime = Date.now();
+        this.metadata.fps = 0;
+      } else {
+        const delta = (Date.now() - lastCalledTime) / 1000;
+        lastCalledTime = Date.now();
+        this.metadata.fps = Math.round((1 / delta));
+      }
+
+
       allVideo.forEach((video) => {
         const { currentTime, duration, ended, paused, seeking } = video;
         const tillEnd = duration - currentTime;
@@ -91,8 +102,8 @@ export class LoopPlayer {
       if (nextVideoTree.video.ended) {
         this.metadata[this.getVideoName(nextVideoTree.video)].raf_ended = Date.now();
         nextVideoTree.video.cancelVideoFrameCallback(videoFrameCallbackId)
-        this.playNextVideo();
         nextVideoTree.video.pause();
+        this.playNextVideo();
         nextVideoTree.video.currentTime = 0;
         return;
       } else if (tillEnd > 0 && tillEnd < 0.06 && prevCurrTime === currentTime) {
