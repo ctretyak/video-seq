@@ -6,9 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
     <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+
       #canvas {
-        width: 100vw;
-        height: 100vh;
         z-index: 100;
       }
 
@@ -20,13 +25,23 @@
         position: absolute;
         z-index: 10;
       }
+
+      #play {
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+        text-align: center;
+      }
     </style>
-    <script type="module" crossorigin src="/video-seq/assets/purervfc-BGDuLanf.js"></script>
+    <script type="module" crossorigin src="/video-seq/assets/purervfc-DeuSfnBQ.js"></script>
     <link rel="modulepreload" crossorigin href="/video-seq/assets/modulepreload-polyfill-B5Qt9EMX.js">
     <link rel="modulepreload" crossorigin href="/video-seq/assets/video-tree-C_pDbh0c.js">
   </head>
   <body style="margin: 0; overflow: hidden">
     <canvas id="canvas"></canvas>
     <div id="hidden-players"></div>
+    <button id="play">Play</button>
   </body>
 </html>

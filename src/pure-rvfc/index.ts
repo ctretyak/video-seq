@@ -17,7 +17,12 @@ const loopPlayer = new LoopPlayer(
   document.getElementById('hidden-players') as HTMLElement
 );
 
-(async () => {
+
+const playButton = document.getElementById('play') as HTMLButtonElement;
+playButton?.addEventListener('click', () => {
+  playButton.innerHTML = 'Loading...';
+  playButton.disabled = true;
   loopPlayer.play();
-})();
+});
+
 
