@@ -4,7 +4,8 @@ export class LoopPlayer {
   tree: VideoTree;
   canvas: HTMLCanvasElement;
   hiddenPlayersElem: HTMLElement;
-  metadata: Record<string, any> = {fps: undefined};
+  metadata: Record<string, any> = { fps: undefined };
+  debug = false;
 
   private currentVideoTree: VideoTree | undefined;
 
@@ -12,6 +13,7 @@ export class LoopPlayer {
     this.tree = videoTree;
     this.canvas = canvas;
     this.hiddenPlayersElem = hiddenPlayersElem;
+    this.debug = debug;
     if (debug) {
       this.hiddenPlayersElem.classList.add('debug');
       document.getElementById("metadata")?.classList.add('debug');
@@ -117,6 +119,9 @@ export class LoopPlayer {
   }
 
   updateMetadata() {
+    if (!this.debug) {
+      return;
+    }
     const metadataElem = document.getElementById("metadata");
     if (metadataElem) {
       const metadataString = JSON.stringify(this.metadata, null, 2);
