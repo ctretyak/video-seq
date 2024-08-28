@@ -35,7 +35,7 @@ export class LoopPlayer {
     const nextVideoTree = this.currentVideoTree?.getNextVideoTree() ?? this.tree;
     nextVideoTree.play();
     const ctx = this.canvas.getContext('2d');
-    const videoFrameCallback: VideoFrameRequestCallback = () => {
+    const videoFrameCallback: VideoFrameRequestCallback = (_now, metadata) => {
 
       if (ctx) {
         ctx.canvas.width = Math.min(screen.width, window.innerWidth);
@@ -54,6 +54,7 @@ export class LoopPlayer {
       }
 
       ctx?.drawImage(nextVideoTree.video, 0, 0, dw, dh);
+      this.metadata[this.getVideoName(video)].rvfc = metadata;
       this.updateMetadata();
       nextVideoTree.video.requestVideoFrameCallback(videoFrameCallback)
     }
@@ -104,7 +105,7 @@ export class LoopPlayer {
       "seeking",
       "stalled",
       "suspend",
-      // "timeupdate",
+      "timeupdate",
       "volumechange",
       "waiting"
     ].forEach((event) => {
