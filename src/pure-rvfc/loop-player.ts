@@ -91,8 +91,10 @@ export class LoopPlayer {
         this.metadata[this.getVideoName(nextVideoTree.video)].raf_ended = Date.now();
         nextVideoTree.video.cancelVideoFrameCallback(videoFrameCallbackId)
         this.playNextVideo();
+        nextVideoTree.video.currentTime = 0;
         return;
-      } else if (tillEnd > 0 && tillEnd < 0.06) {
+      } else if (this.iOS() && tillEnd > 0 && tillEnd < 0.06) {
+        console.log("lag")
         nextVideoTree.video.currentTime = nextVideoTree.video.duration;
       }
       window.requestAnimationFrame(frameRequestCallback);
@@ -153,5 +155,18 @@ export class LoopPlayer {
         this.updateMetadata();
       })
     })
+  }
+
+  iOS() {
+    return [
+      'iPad Simulator',
+      'iPhone Simulator',
+      'iPod Simulator',
+      'iPad',
+      'iPhone',
+      'iPod'
+    ].includes(navigator.platform)
+      // iPad on iOS 13 detection
+      || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
   }
 }
