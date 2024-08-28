@@ -111,7 +111,7 @@ export class LoopPlayer {
       video.addEventListener(event, () => {
         const lastEvents: string[] = this.metadata[this.getVideoName(video)].last_events;
         lastEvents.push(event);
-        if (lastEvents.length > 5) {
+        if (lastEvents.length > 4) {
           lastEvents.shift();
         }
         this.metadata[this.getVideoName(video)].last_event_ts = Date.now();
