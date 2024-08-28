@@ -19,13 +19,12 @@ export class LoopPlayer {
   }
 
   async play() {
-    const allVideo = await this.tree.load();
+    const allVideo = await this.tree.load(video=> this.addEventsCallbacks(video));
 
     const hiddenPlayersElem = document.getElementById('hidden-players');
     allVideo.forEach((video) => {
       this.metadata[this.getVideoName(video)] = { last_events: [] };
       hiddenPlayersElem?.appendChild(video);
-      this.addEventsCallbacks(video);
     });
 
     const frameRequestCallback: FrameRequestCallback = () => {

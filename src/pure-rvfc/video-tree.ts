@@ -20,14 +20,16 @@ export class VideoTree {
     this.nodes = nodes;
   }
 
-  async load(): Promise<HTMLVideoElement[]> {
+  async load(setEventCallbacks: (v: HTMLVideoElement)=> void): Promise<HTMLVideoElement[]> {
     this.video = document.createElement('video');
+    setEventCallbacks(this.video);
     this.video.playsInline = true;
     this.video.preload = "auto";
     this.video.controls = true;
     this.video.muted = true;
     this.video.autoplay = true;
     this.video.src = this.src;
+    this.video.pause();
 
     const videoLoadedPromise = new Promise<HTMLVideoElement>((resolve) => {
       const canPlay = () => {
@@ -35,8 +37,6 @@ export class VideoTree {
 
         const loaded = () => {
           this.video.removeEventListener('canplaythrough', loaded);
-          this.video.pause();
-          // this.video.currentTime = 0;
           resolve(this.video);
         }
 
@@ -46,7 +46,7 @@ export class VideoTree {
       this.video.addEventListener('canplay', canPlay);
     });
 
-    const [pr, pr2 = []] = await Promise.all([videoLoadedPromise, ...this.nodes.map((node) => node.load())]);
+    const [pr, pr2 = []] = await Promise.all([videoLoadedPromise, ...this.nodes.map((node) => node.load(setEventCallbacks))]);
     return [pr, ...pr2]
   }
 
