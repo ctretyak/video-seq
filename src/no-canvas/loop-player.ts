@@ -8,20 +8,26 @@ export class LoopPlayer {
 
   private currentVideoTree: VideoTree | undefined;
 
-  constructor(videoTree: VideoTree, hiddenPlayersElem: HTMLElement, debug = false) {
+  constructor(
+    videoTree: VideoTree,
+    hiddenPlayersElem: HTMLElement,
+    debug = false,
+  ) {
     this.tree = videoTree;
     this.hiddenPlayersElem = hiddenPlayersElem;
     this.debug = debug;
     if (debug) {
-      this.hiddenPlayersElem.classList.add('debug');
-      document.getElementById("metadata")?.classList.add('debug');
+      this.hiddenPlayersElem.classList.add("debug");
+      document.getElementById("metadata")?.classList.add("debug");
     }
   }
 
   async play() {
-    const allVideo = await this.tree.load(video => this.addEventsCallbacks(video));
+    const allVideo = await this.tree.load((video) =>
+      this.addEventsCallbacks(video),
+    );
 
-    const hiddenPlayersElem = document.getElementById('hidden-players');
+    const hiddenPlayersElem = document.getElementById("hidden-players");
     allVideo.forEach((video) => {
       this.metadata[this.getVideoName(video)] = { last_events: [] };
       hiddenPlayersElem?.appendChild(video);
@@ -35,9 +41,8 @@ export class LoopPlayer {
       } else {
         const delta = (Date.now() - lastCalledTime) / 1000;
         lastCalledTime = Date.now();
-        this.metadata.fps = Math.round((1 / delta));
+        this.metadata.fps = Math.round(1 / delta);
       }
-
 
       allVideo.forEach((video) => {
         const { currentTime, duration, ended, paused, seeking } = video;
@@ -50,11 +55,11 @@ export class LoopPlayer {
           seeking,
           tillEnd: tillEnd.toFixed(3),
         };
-      })
+      });
       this.updateMetadata();
 
       window.requestAnimationFrame(frameRequestCallback);
-    }
+    };
 
     window.requestAnimationFrame(frameRequestCallback);
 
@@ -62,10 +67,11 @@ export class LoopPlayer {
   }
 
   playNextVideo() {
-    const nextVideoTree = this.currentVideoTree?.getNextVideoTree() ?? this.tree;
+    const nextVideoTree =
+      this.currentVideoTree?.getNextVideoTree() ?? this.tree;
     nextVideoTree.play();
     nextVideoTree.video.style.zIndex = "11";
-    if(this.currentVideoTree) {
+    if (this.currentVideoTree) {
       this.currentVideoTree.video.style.zIndex = "10";
     }
     // const ended = () => {
@@ -74,22 +80,31 @@ export class LoopPlayer {
     //   this.playNextVideo();
     // }
     // nextVideoTree.video.addEventListener('ended', ended)
+    let lastCurrentTime = nextVideoTree.video.currentTime;
     const frameRequestCallback: FrameRequestCallback = () => {
       const { currentTime, duration } = nextVideoTree.video;
       const tillEnd = duration - currentTime;
       if (nextVideoTree.video.ended) {
-        this.metadata[this.getVideoName(nextVideoTree.video)].raf_ended = Date.now();
+        this.metadata[this.getVideoName(nextVideoTree.video)].raf_ended =
+          Date.now();
         nextVideoTree.video.pause();
         this.playNextVideo();
         nextVideoTree.video.currentTime = 0;
         return;
-      } else if (this.iOS() && tillEnd > 0 && tillEnd < 0.06) {
+      } else if (
+        tillEnd > 0 &&
+        tillEnd < 0.06 &&
+        lastCurrentTime === currentTime
+      ) {
+        this.playNextVideo();
         nextVideoTree.video.currentTime = nextVideoTree.video.duration;
+        return;
       }
+      lastCurrentTime = currentTime;
       window.requestAnimationFrame(frameRequestCallback);
-    }
-
-    window.requestAnimationFrame(frameRequestCallback)
+    };
+    // window.requestAnimationFrame(frameRequestCallback);
+    frameRequestCallback(Date.now());
 
     this.currentVideoTree = nextVideoTree;
   }
@@ -135,11 +150,12 @@ export class LoopPlayer {
       "suspend",
       "timeupdate",
       "volumechange",
-      "waiting"
+      "waiting",
     ].forEach((event) => {
       video.addEventListener(event, () => {
-        const lastEvents: string[] = this.metadata[this.getVideoName(video)]?.last_events;
-        if(!lastEvents) {
+        const lastEvents: string[] =
+          this.metadata[this.getVideoName(video)]?.last_events;
+        if (!lastEvents) {
           return;
         }
         lastEvents.push(event);
@@ -148,20 +164,22 @@ export class LoopPlayer {
         }
         this.metadata[this.getVideoName(video)].last_event_ts = Date.now();
         this.updateMetadata();
-      })
-    })
+      });
+    });
   }
 
   iOS() {
-    return [
-      'iPad Simulator',
-      'iPhone Simulator',
-      'iPod Simulator',
-      'iPad',
-      'iPhone',
-      'iPod'
-    ].includes(navigator.platform)
+    return (
+      [
+        "iPad Simulator",
+        "iPhone Simulator",
+        "iPod Simulator",
+        "iPad",
+        "iPhone",
+        "iPod",
+      ].includes(navigator.platform) ||
       // iPad on iOS 13 detection
-      || (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+      (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+    );
   }
 }
