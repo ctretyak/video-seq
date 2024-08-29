@@ -6,38 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + TS</title>
     <style>
-      #player-wrapper {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        max-height: 30vh;
-        max-width: 30vw;
-        background-color: #333;
-        color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      canvas {
+        position: absolute;
+        top: 0;
+        z-index: 100;
       }
-
-      #hidden-area {
+      #hiden-video-container,
+      #hiden-video-container video {
         position: absolute;
         max-height: 30vh;
         display: flex;
-        z-index: -1;
-      }
-
-      #hidden-area > video {
+        z-index: 10;
       }
     </style>
-    <script type="module" crossorigin src="/video-seq/assets/main-C1pWpf3a.js"></script>
+    <script type="module" crossorigin src="/video-seq/assets/processing-jYMGF6GL.js"></script>
     <link rel="modulepreload" crossorigin href="/video-seq/assets/modulepreload-polyfill-B5Qt9EMX.js">
     <link rel="modulepreload" crossorigin href="/video-seq/assets/index-CU2cXWwI.js">
     <link rel="modulepreload" crossorigin href="/video-seq/assets/video-tree-C9LeQqEj.js">
-    <link rel="modulepreload" crossorigin href="/video-seq/assets/NineSliceGeometry-CZfHVfUI.js">
   </head>
   <body style="margin: 0; overflow: hidden">
     <div id="app"></div>
-    <div id="player-wrapper"></div>
-    <div id="hidden-area"></div>
+    <div id="hidden-video-container"></div>
   </body>
 </html>

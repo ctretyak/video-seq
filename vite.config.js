@@ -1,14 +1,15 @@
 export default {
-  base: '/video-seq',
+  base: "/video-seq",
   build: {
-    outDir: 'docs',
+    outDir: "docs",
     rollupOptions: {
       input: {
-        main: 'index.html',
-        callback: 'callback.html',
-        purervfc: 'pure-rvfc.html',
-        ["no-canvas"]: 'no-canvas.html',
+        main: "index.html",
+        callback: "callback.html",
+        purervfc: "pure-rvfc.html",
+        ["no-canvas"]: "no-canvas.html",
+        ["processing"]: "processing.html",
       },
     },
-  }
-}
+  },
+};
