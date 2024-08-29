@@ -4,7 +4,7 @@ export class VideoSprite extends Sprite {
   private video: HTMLVideoElement;
   private canvas = document.createElement("canvas");
   private FPS = 60;
-  private textures: Texture[] = [];
+  private frames: Array<{ time: number; texture: Texture }> = [];
 
   constructor(src: string) {
     super();
@@ -37,9 +37,10 @@ export class VideoSprite extends Sprite {
   async captureFrames() {
     const { duration } = this.video;
     const step = 1 / this.FPS;
-    this.textures = [];
+    this.frames = [];
     for (let time = 0; time <= duration; time += step) {
-      this.textures.push(await this.captureFrame(time));
+      const texture = await this.captureFrame(time);
+      this.frames.push({ time: time - step, texture });
     }
   }
 
@@ -64,22 +65,22 @@ export class VideoSprite extends Sprite {
   }
 
   play() {
-    let frameId = 1;
-    this.texture = this.textures[frameId];
-    this.resize();
+    const startTime = Date.now();
     const onTick = () => {
       this.resize();
 
-      frameId++;
-      const nextFrame = this.textures[frameId];
+      const ellapsedTime = (Date.now() - startTime) / 1000;
+      const nextFrame = this.frames.find(({ time }) => time >= ellapsedTime);
+
       if (!nextFrame) {
         Ticker.shared.remove(onTick);
         this.emit("end");
         return;
       }
-      this.texture = nextFrame;
+      this.texture = nextFrame.texture;
     };
     Ticker.shared.add(onTick);
+    onTick();
   }
 
   resize() {
