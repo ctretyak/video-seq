@@ -94,12 +94,13 @@ export class LoopPlayer {
       } else if (
         tillEnd > 0 &&
         tillEnd < 0.06 &&
-        lastCurrentTime === currentTime
+        currentTime === lastCurrentTime
       ) {
         this.metadata[this.getVideoName(nextVideoTree.video)].endBefore =
           Date.now();
+        nextVideoTree.video.pause();
         this.playNextVideo();
-        nextVideoTree.video.currentTime = nextVideoTree.video.duration;
+        nextVideoTree.video.currentTime = 0;
         return;
       }
       lastCurrentTime = currentTime;
