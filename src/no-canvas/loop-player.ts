@@ -205,9 +205,24 @@ export class LoopPlayer {
   }
 
   createTransparentVideo() {
+    function supportsHEVCAlpha() {
+      const navigator = window.navigator;
+      const ua = navigator.userAgent.toLowerCase();
+      const hasMediaCapabilities = !!(
+        navigator.mediaCapabilities && navigator.mediaCapabilities.decodingInfo
+      );
+      const isSafari =
+        ua.indexOf("safari") != -1 &&
+        !(ua.indexOf("chrome") != -1) &&
+        ua.indexOf("version/") != -1;
+
+      return isSafari && hasMediaCapabilities;
+    }
+
     const video = document.createElement("video");
-    video.src =
-      "https://ctretyak.github.io/video-test/ezgif-7-98659ba322-part1.webm";
+    video.src = supportsHEVCAlpha()
+      ? "https://doggo.s3.amazonaws.com/output.mov"
+      : "https://doggo.s3.amazonaws.com/output.webm";
     video.muted = true;
     video.loop = true;
     video.autoplay = true;
