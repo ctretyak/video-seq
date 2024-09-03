@@ -5,17 +5,22 @@ export class LoopPlayer {
   hiddenPlayersElem: HTMLElement;
   metadata: Record<string, any> = { fps: undefined };
   debug = false;
+  transparent = false;
 
   private currentVideoTree: VideoTree | undefined;
 
   constructor(
     videoTree: VideoTree,
     hiddenPlayersElem: HTMLElement,
-    debug = false,
+    {
+      debug = false,
+      transparent = false,
+    }: { debug?: boolean; transparent?: boolean },
   ) {
     this.tree = videoTree;
     this.hiddenPlayersElem = hiddenPlayersElem;
     this.debug = debug;
+    this.transparent = transparent;
     if (debug) {
       this.hiddenPlayersElem.classList.add("debug");
       document.getElementById("metadata")?.classList.add("debug");
@@ -35,6 +40,12 @@ export class LoopPlayer {
       }
       hiddenPlayersElem?.appendChild(video);
     });
+
+    if (this.transparent) {
+      const transparentVideo = this.createTransparentVideo();
+      transparentVideo.style.zIndex = "101";
+      this.hiddenPlayersElem.appendChild(transparentVideo);
+    }
 
     let lastCalledTime: number;
     const frameRequestCallback: FrameRequestCallback = () => {
@@ -191,6 +202,17 @@ export class LoopPlayer {
       // iPad on iOS 13 detection
       (navigator.userAgent.includes("Mac") && "ontouchend" in document)
     );
+  }
+
+  createTransparentVideo() {
+    const video = document.createElement("video");
+    video.src =
+      "https://ctretyak.github.io/video-test/ezgif-7-98659ba322-part1.webm";
+    video.muted = true;
+    video.loop = true;
+    video.autoplay = true;
+
+    return video;
   }
 }
 

@@ -1,5 +1,5 @@
 import { VideoTree } from "./video-tree";
-import { VIDEO_TREE } from '../video-tree';
+import { VIDEO_TREE } from "../video-tree";
 import { LoopPlayer } from "./loop-player";
 
 let jsonVideoTree = VIDEO_TREE;
@@ -11,21 +11,19 @@ if (paramsTree) {
 }
 
 const debug = searchParams.has("debug");
+const transparent = searchParams.has("transparent");
 
 const videoTree = VideoTree.fromJSON(jsonVideoTree);
 const loopPlayer = new LoopPlayer(
   videoTree,
-  document.getElementById('hidden-players') as HTMLElement,
-  debug
+  document.getElementById("hidden-players") as HTMLElement,
+  { debug, transparent },
 );
 
-
-const playButton = document.getElementById('play') as HTMLButtonElement;
-playButton?.addEventListener('click', async () => {
-  playButton.innerHTML = 'Loading...';
+const playButton = document.getElementById("play") as HTMLButtonElement;
+playButton?.addEventListener("click", async () => {
+  playButton.innerHTML = "Loading...";
   playButton.disabled = true;
   await loopPlayer.play();
-  playButton.style.display = 'none';
+  playButton.style.display = "none";
 });
-
-
