@@ -30,7 +30,9 @@ export class LoopPlayer {
     const hiddenPlayersElem = document.getElementById("hidden-players");
     allVideo.forEach((video, idx) => {
       this.metadata[this.getVideoName(video)] = { last_events: [] };
-      video.style.border = `2px solid ${colors[idx]}`;
+      if (this.debug) {
+        video.style.border = `2px solid ${colors[idx]}`;
+      }
       hiddenPlayersElem?.appendChild(video);
     });
 
