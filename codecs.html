@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+    <style>
+      canvas {
+        position: absolute;
+        top: 0;
+        z-index: 100;
+      }
+      #hiden-video-container,
+      #hiden-video-container video {
+        position: absolute;
+        max-height: 30vh;
+        display: flex;
+        z-index: 10;
+      }
+    </style>
+  </head>
+  <body style="margin: 0; overflow: hidden">
+    <div id="app"></div>
+    <div id="hidden-video-container"></div>
+    <script type="module" src="/src/codecs/index.ts"></script>
+  </body>
+</html>
