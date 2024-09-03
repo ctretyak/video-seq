@@ -28,8 +28,9 @@ export class LoopPlayer {
     );
 
     const hiddenPlayersElem = document.getElementById("hidden-players");
-    allVideo.forEach((video) => {
+    allVideo.forEach((video, idx) => {
       this.metadata[this.getVideoName(video)] = { last_events: [] };
+      video.style.border = `2px solid ${colors[idx]}`;
       hiddenPlayersElem?.appendChild(video);
     });
 
@@ -186,3 +187,25 @@ export class LoopPlayer {
     );
   }
 }
+
+const colors = [
+  "red",
+  "green",
+  "blue",
+  "yellow",
+  "purple",
+  "orange",
+  "pink",
+  "brown",
+  "cyan",
+  "magenta",
+  "lime",
+  "teal",
+  "indigo",
+  "violet",
+  "light-blue",
+  "light-green",
+  "amber",
+  "deep-orange",
+  "deep-purple",
+];
