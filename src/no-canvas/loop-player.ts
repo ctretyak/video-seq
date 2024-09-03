@@ -88,9 +88,11 @@ export class LoopPlayer {
       if (nextVideoTree.video.ended) {
         this.metadata[this.getVideoName(nextVideoTree.video)].raf_ended =
           Date.now();
-        nextVideoTree.video.pause();
         this.playNextVideo();
-        nextVideoTree.video.currentTime = 0;
+        setTimeout(() => {
+          nextVideoTree.video.pause();
+          nextVideoTree.video.currentTime = 0;
+        }, 100);
         return;
       } else if (
         tillEnd > 0 &&
@@ -99,9 +101,11 @@ export class LoopPlayer {
       ) {
         this.metadata[this.getVideoName(nextVideoTree.video)].endBefore =
           Date.now();
-        nextVideoTree.video.pause();
         this.playNextVideo();
-        nextVideoTree.video.currentTime = 0;
+        setTimeout(() => {
+          nextVideoTree.video.pause();
+          nextVideoTree.video.currentTime = 0;
+        }, 100);
         return;
       }
       lastCurrentTime = currentTime;
